@@ -127,3 +127,73 @@ nav ul li a {
 nav ul li a:hover {
     background-color: #e9ecef;
 }
+/* css/style.css (am Ende hinzufügen) */
+
+/* Grundlegendes Styling für das Hauptmenü */
+#main-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#main-nav ul li {
+    position: relative; /* Wichtig für die Positionierung des Submenüs */
+}
+
+/* Styling für die Links im Hauptmenü (hier können Sie Ihr altes Nav-Styling ersetzen) */
+#main-nav > ul > li > a {
+    display: block;
+    padding: 10px 15px;
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid #003366;
+}
+
+#main-nav > ul > li > a:hover {
+    background-color: #003366;
+}
+
+/* Submenü Styling */
+.submenu {
+    display: none; /* Standardmäßig versteckt */
+    position: absolute; /* Über dem Inhalt positionieren */
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 10;
+    min-width: 200px;
+    /* Positionierung für Desktop (neben dem Hauptelement) */
+    left: 100%; 
+    top: 0;
+}
+
+/* Submenü Links */
+.submenu li a {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+}
+
+.submenu li a:hover {
+    background-color: #e9e9e9;
+}
+
+/* Einblenden des Submenüs, wenn man über das Hauptelement fährt */
+#main-nav ul li.has-submenu:hover > .submenu {
+    display: block;
+}
+
+/* Anpassungen, damit das Menü im mobilen Container gut aussieht */
+@media (max-width: 600px) {
+    .submenu {
+        position: relative; /* Im mobilen Layout unter dem Hauptelement */
+        left: 0;
+        top: auto;
+        background-color: #e9e9e9;
+        box-shadow: none;
+    }
+    #main-nav ul li.has-submenu:hover > .submenu {
+        display: none; /* JS wird das Einblenden bei Klick übernehmen */
+    }
+}

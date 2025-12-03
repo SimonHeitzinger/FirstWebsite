@@ -4,11 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quader-Rechner Pro</title>
-    <link rel="stylesheet" href="../css/style.css">
+    
+    <!-- PASST HIER AN LOKAL / GITHUB PAGES -->
+    <base href="/"> 
+    <!-- ODER -->
+    <!-- <base href="/SuperToolbox/"> -->
+
+    <!-- CSS-Pfad ist jetzt relativ zum Basisverzeichnis (wegen <base>) -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    
+    <!-- HIER WIRD DAS MENÜ EINGEFÜGT -->
+    <header id="menu-container"></header>
 
     <div class="container">
+        <!-- Der spezifische Inhalt der Quader-Seite -->
         <h1>Quader-Rechner Pro</h1>
 
         <section class="input-section">
@@ -90,10 +101,10 @@
         </section>
     </div>
 
-    <!-- Die Reihenfolge ist wichtig: shared.js MUSS zuerst geladen werden -->
-    <script src="../js/shared.js"></script>
-    <script src="script.js"></script>
-
+    <!-- Skripte für die Funktionalität der Seite (Pfade sind relativ zur Basis) -->
+    <script src="js/menuLoader.js"></script>
+    <script src="js/shared.js"></script>
+    <!-- Das script.js liegt in /tools/geometrie/quader/ -->
+    <script src="tools/geometrie/quader/script.js"></script> 
 </body>
 </html>
-

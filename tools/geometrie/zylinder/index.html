@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zylinder-Rechner Pro</title>
+    <!-- PASST HIER AN LOKAL / GITHUB PAGES -->
+    <base href="/"> 
+    <!-- ODER -->
+    <!-- <base href="/SuperToolbox/"> -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header id="menu-container"></header>
+    <div class="container">
+        <h1>Zylinder-Rechner Pro</h1>
+
+        <section class="input-section">
+            <p>Geben Sie die Maße des Zylinders ein:</p>
+            
+            <div class="dimension-group">
+                <label for="radius">Radius:</label>
+                <input type="number" id="radius" placeholder="Radius" min="0" step="any" value="5">
+                <select id="unitRadius" class="unit-select">
+                    <option value="um">µm</option>
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="dm">dm</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                </select>
+            </div>
+             <div class="dimension-group">
+                <label for="height">Höhe:</label>
+                <input type="number" id="height" placeholder="Höhe" min="0" step="any" value="10">
+                <select id="unitHeight" class="unit-select">
+                    <option value="um">µm</option>
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="dm">dm</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="material-section">
+           <!-- Materialsektion ist dieselbe wie bei Kugel und Quader -->
+           <label for="materialSelector">Material auswählen:</label>
+           <select id="materialSelector">
+               <option value="luft" data-density="1.225">Luft</option>
+               <option value="wasser" data-density="1000">Wasser (destilliert)</option>
+               <option value="stahl" data-density="7850">Stahl (Standard)</option>
+           </select>
+        </section>
+
+        <section class="results-section">
+           <!-- Ergebnisssektion ist dieselbe wie bei Kugel und Quader -->
+            <h2>Ergebnisse:</h2>
+            <button id="autoScaleButton">Automatische Einheitenwahl</button>
+            <p>
+                Oberfläche: <strong id="resultArea">0</strong> 
+                <select id="unitAreaSelector" class="result-unit-select"></select>
+            </p>
+            <p>
+                Volumen: <strong id="resultVolume">0</strong> 
+                <select id="unitVolumeSelector" class="result-unit-select"></select>
+            </p>
+            <p>
+                Gewicht: <strong id="resultWeight">0</strong> 
+                <select id="unitWeightSelector" class="result-unit-select"></select>
+            </p>
+        </section>
+    </div>
+
+    <!-- Skripte für die Funktionalität der Seite (Pfade sind relativ zur Basis) -->
+    <script src="js/menuLoader.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="tools/geometrie/zylinder/script.js"></script> 
+</body>
+</html>
