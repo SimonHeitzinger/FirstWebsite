@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quader-Rechner</title>
+    <!-- <link rel="stylesheet" href="css/style.css"> -->
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quader-Rechner</h1>
+
+        <section class="input-section">
+            <p>Geben Sie die Maße des Quaders ein:</p>
+            
+            <div class="dimension-group">
+                <label for="length">Länge:</label>
+                <input type="number" id="length" placeholder="Länge" min="0" step="any" value="10">
+                <select id="unitLength">
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="m">m</option>
+                </select>
+            </div>
+
+            <div class="dimension-group">
+                <label for="width">Breite:</label>
+                <input type="number" id="width" placeholder="Breite" min="0" step="any" value="5">
+                <select id="unitWidth">
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="m">m</option>
+                </select>
+            </div>
+
+            <div class="dimension-group">
+                <label for="height">Höhe:</label>
+                <input type="number" id="height" placeholder="Höhe" min="0" step="any" value="2">
+                <select id="unitHeight">
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="m">m</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="material-section">
+            <label for="materialSelector">Material auswählen (Dichte in kg/m³):</label>
+            <select id="materialSelector">
+                <option value="wasser" data-density="1000">Wasser</option>
+                <option value="aluminium" data-density="2700">Aluminium</option>
+                <option value="eisen" data-density="7870">Eisen</option>
+                <option value="gold" data-density="19300">Gold</option>
+            </select>
+        </section>
+
+        <section class="results-section">
+            <h2>Ergebnisse:</h2>
+            <p>Oberfläche: <strong id="resultArea">0</strong> m²</p>
+            <p>Volumen: <strong id="resultVolume">0</strong> m³</p>
+            <p>Gewicht: <strong id="resultWeight">0</strong> kg</p>
+        </section>
+    </div>
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>

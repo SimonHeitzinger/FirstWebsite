@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quader-Rechner Pro</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Quader-Rechner Pro</h1>
+
+        <section class="input-section">
+            <p>Geben Sie die Maße des Quaders ein:</p>
+            
+            <div class="dimension-group">
+                <label for="length">Länge:</label>
+                <input type="number" id="length" placeholder="Länge" min="0" step="any" value="10">
+                <select id="unitLength" class="unit-select">
+                    <option value="um">µm</option>
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                </select>
+            </div>
+
+            <div class="dimension-group">
+                <label for="width">Breite:</label>
+                <input type="number" id="width" placeholder="Breite" min="0" step="any" value="5">
+                <select id="unitWidth" class="unit-select">
+                   <option value="um">µm</option>
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                </select>
+            </div>
+
+            <div class="dimension-group">
+                <label for="height">Höhe:</label>
+                <input type="number" id="height" placeholder="Höhe" min="0" step="any" value="2">
+                <select id="unitHeight" class="unit-select">
+                    <option value="um">µm</option>
+                    <option value="mm">mm</option>
+                    <option value="cm" selected>cm</option>
+                    <option value="m">m</option>
+                    <option value="km">km</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="material-section">
+            <label for="materialSelector">Material auswählen:</label>
+            <select id="materialSelector">
+                <!-- Die Dichten sind jetzt sehr exakt und in kg/m³ -->
+                <option value="luft" data-density="1.225">Luft</option>
+                <option value="wasser" data-density="1000">Wasser (destilliert)</option>
+                <option value="eis" data-density="916">Eis</option>
+                <option value="holz_eiche" data-density="750">Holz (Eiche)</option>
+                <option value="aluminium" data-density="2700">Aluminium</option>
+                <option value="stahl" data-density="7850">Stahl (Standard)</option>
+                <option value="kupfer" data-density="8960">Kupfer</option>
+                <option value="blei" data-density="11340">Blei</option>
+                <option value="gold" data-density="19300">Gold</option>
+                <option value="osmium" data-density="22590">Osmium (am dichtesten)</option>
+            </select>
+        </section>
+
+        <section class="results-section">
+            <h2>Ergebnisse:</h2>
+            <button id="autoScaleButton">Automatische Einheitenwahl</button>
+
+            <p>
+                Oberfläche: <strong id="resultArea">0</strong> 
+                <select id="unitAreaSelector" class="result-unit-select"></select>
+            </p>
+            <p>
+                Volumen: <strong id="resultVolume">0</strong> 
+                <select id="unitVolumeSelector" class="result-unit-select"></select>
+            </p>
+            <p>
+                Gewicht: <strong id="resultWeight">0</strong> kg
+            </p>
+        </section>
+    </div>
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>
