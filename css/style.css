@@ -1,4 +1,4 @@
-/* Grundlegende Resets und Layout */
+/* css/style.css */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f4f9;
@@ -52,7 +52,6 @@ input[type="number"], select {
 
 input[type="number"] {
     width: 60%;
-    /* Passt die Breite der Input-Felder an, wenn die Selects daneben sind */
 }
 
 /* Sorgt dafür, dass Input und Select nebeneinander in einer Zeile bleiben */
@@ -92,7 +91,6 @@ strong {
     margin-left: 10px;
 }
 
-/* In css/style.css, irgendwo am Ende hinzufügen */
 #autoScaleButton {
     padding: 10px 15px;
     background-color: #007bff;
@@ -102,8 +100,30 @@ strong {
     cursor: pointer;
     margin-bottom: 15px;
     font-size: 0.9em;
+    width: 100%;
 }
 
 #autoScaleButton:hover {
     background-color: #0056b3;
+}
+
+/* Stil für das Menü auf der Startseite */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li a {
+    display: block;
+    padding: 10px;
+    margin-bottom: 5px;
+    background-color: #f0f0f0;
+    text-decoration: none;
+    color: #0056b3;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover {
+    background-color: #e9ecef;
 }
