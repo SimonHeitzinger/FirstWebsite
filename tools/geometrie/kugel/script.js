@@ -17,6 +17,41 @@ document.addEventListener('DOMContentLoaded', (event) => {
         unitWeightSelector: document.getElementById('unitWeightSelector')
     };
 
+
+    let materialsData = []; // Hier werden die JSON-Daten gespeichert
+
+    
+    // --- Funktion zum Laden der Materialien ---
+    function loadMaterials() {
+        // Verwenden der globalen Funktion, um den korrekten Pfad zu finden
+        const materialPath = window.getPathPrefix() + 'data/materials.json';
+
+        fetch(materialPath)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Netzwerkantwort war nicht ok: ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(materials => {
+                materialsData = materials; // Daten in der Variable speichern
+
+                materials.forEach(material => {
+                    const option = document.createElement('option');
+                    option.value = material.id; // Speichern Sie die ID als Wert
+                    option.textContent = material.name; 
+                    materialSelector.appendChild(option);
+                });
+                
+                // Nachdem die Materialien geladen sind, initialisieren wir den Rechner
+                initializeCalculator(); 
+            })
+            .catch(error => {
+                console.error('Fehler beim Laden der Materialien:', error);
+                document.getElementById('resultWeight').textContent = 'Fehler beim Laden der Materialien.';
+            });
+    }
+
     // --- 2. Datenhaltung (lokale Variablen) ---
     const calculationData = {
         globalSurfaceAreaM2: 0,
@@ -39,8 +74,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         calculationData.globalSurfaceAreaM2 = 4 * Math.PI * Math.pow(radiusMeters, 2);
         calculationData.globalVolumeM3 = (4/3) * Math.PI * Math.pow(radiusMeters, 3);
 
-        const density = materialSelector.options[materialSelector.selectedIndex].dataset.density;
-        calculationData.globalWeightKg = density * calculationData.globalVolumeM3; 
+
+
+        // Dichte aus der JS-Variable materialsData abrufen
+        const selectedMaterialId = materialSelector.value;
+        const selectedMaterial = materialsData.find(m => m.id === selectedMaterialId);
+        
+        if (selectedMaterial) {
+            const density = selectedMaterial.density; // Verwenden Sie die Dichte aus dem JSON
+            calculationData.globalWeightKg = density * calculationData.globalVolumeM3; 
+        } else {
+            calculationData.globalWeightKg = 0;
+        }
+
 
         window.Geometry.updateResultDisplay(calculationData, resultSelectors);
     }
@@ -72,4 +118,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // --- 5. Initialisierung ---
     window.Geometry.populateResultSelectors(resultSelectors);
     calculate(); 
+
+    
+    // Starten Sie den Ladevorgang der Materialien beim DOMContentLoaded
+    loadMaterials();
 });

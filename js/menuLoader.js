@@ -2,27 +2,19 @@
 
 // Konfigurieren Sie hier den Namen Ihres GitHub-Repositories, falls zutreffend.
 const REPO_BASE_NAME = 'FirstWebsite'; 
-
-/**
- * Berechnet den Basis-URL-Pfad für das Projekt.
- */
-function getBasePath() {
+// Machen Sie diese global zugänglich
+window.getBasePath = function() {
     if (window.location.hostname.endsWith('.github.io') && REPO_BASE_NAME.length > 0) {
         return '/' + REPO_BASE_NAME + '/';
     }
-    // Lokal oder bei Veröffentlichung direkt im Root der gh-pages Domain
     return '/';
 }
 
-/**
- * Berechnet den relativen Pfad (z.B. '../../') vom aktuellen Standort zum Stamm.
- */
-function getPathPrefix() {
-    const basePath = getBasePath();
+// Machen Sie diese global zugänglich
+window.getPathPrefix = function() {
+    const basePath = window.getBasePath(); // Jetzt rufen wir die globale Funktion auf
     const currentPath = window.location.pathname;
-
     const relativePath = currentPath.replace(basePath, '/').split('/').filter(segment => segment.length > 0);
-
     let prefix = '';
     for (let i = 0; i < relativePath.length - 1; i++) {
         prefix += '../';
