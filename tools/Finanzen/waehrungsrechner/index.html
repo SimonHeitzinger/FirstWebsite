@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Währungsrechner</title>
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+    
+    <header id="menu-container"></header>
+
+    <div class="container">
+        <h1>Währungsrechner</h1>
+        <p>Aktuelle Wechselkurse über eine externe API.</p>
+
+        <section class="input-section">
+            <div class="dimension-group">
+                <label for="amountFrom">Betrag von:</label>
+                <input type="number" id="amountFrom" min="0" step="any" value="100">
+                <select id="currencyFrom"></select>
+            </div>
+            
+            <div class="dimension-group">
+                <label for="amountTo">Betrag zu:</label>
+                <!-- Wir nutzen dieses Feld nur zur Anzeige (readonly) -->
+                <input type="number" id="amountTo" min="0" step="any" readonly>
+                <select id="currencyTo"></select>
+            </div>
+        </section>
+        
+        <section class="results-section">
+            <p id="exchangeRateDisplay">Wechselkurs: Wird geladen...</p>
+        </section>
+    </div>
+
+    <!-- Skripte laden -->
+    <script src="../../../../js/menuLoader.js"></script>
+    <script src="waehrungsrechner.js"></script> 
+</body>
+</html>
