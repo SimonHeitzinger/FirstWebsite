@@ -130,6 +130,11 @@ strong { color: #28a745; font-size: 1.2em; }
     color: white;
     text-decoration: none;
     border-bottom: 1px solid #003366; 
+     
+    /* Fügen Sie HIER den Abstand hinzu: */
+    margin-bottom: 3px; 
+    border-radius: 4px; /* Optional: fügt weiche Ecken hinzu, passend zum Margin */
+
 }
 
 #main-nav > .menu-container-inner > ul > li > a:hover {
