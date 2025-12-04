@@ -3,7 +3,7 @@
 // Konfigurieren Sie hier den Namen Ihres GitHub-Repositories, falls zutreffend.
 // Bei simonheitzinger.github.io ist es leer ('').
 // Bei benutzername.github.io wäre es 'MeinRepo'.
-const REPO_BASE_NAME = ''; // <-- HIER ggf. 'FirstWebsite' eintragen, falls nötig
+const REPO_BASE_NAME = 'FirstWebsite'; // <-- HIER ggf. 'FirstWebsite' eintragen, falls nötig
 
 /**
  * Berechnet den Basis-URL-Pfad für das Projekt.
