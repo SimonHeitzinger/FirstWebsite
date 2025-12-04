@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Geometrie-Rechner</title>
     
-    <base href="https://simonheitzinger.github.io/FirstWebsite/"> <!-- Ändern Sie dies auf "/SuperToolbox/" für GitHub Pages -->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- ... -->
+    <!-- Relativer Link zum CSS: 2 Ebenen nach oben gehen (von /tools/geometrie/ nach /), dann in den Ordner css -->
+    <link rel="stylesheet" href="../../css/style.css"> 
+    
+    <!-- KEIN BASE TAG HIER! -->
 </head>
 <body>
     
@@ -20,15 +21,16 @@
         
         <nav>
             <ul>
-                <!-- Pfade absolut machen (relativ zum Base HREF) -->
-                <li><a href="tools/geometrie/quader/index.html">Quader</a></li>
-                <li><a href="tools/geometrie/kugel/index.html">Kugel</a></li>
-                <li><a href="tools/geometrie/zylinder/index.html">Zylinder</a></li>
+                <!-- Pfade RELATIV zur aktuellen Position (/tools/geometrie/) -->
+                <li><a href="quader/index.html">Quader</a></li>
+                <li><a href="kugel/index.html">Kugel</a></li>
+                <li><a href="zylinder/index.html">Zylinder</a></li>
             </ul>
         </nav>
     </div>
 
-    <script src="js/menuLoader.js"></script>
+    <!-- Relativer Link zum JS-Lader: 2 Ebenen nach oben gehen, dann in den Ordner js -->
+    <script src="../../js/menuLoader.js"></script>
 
 </body>
 </html>

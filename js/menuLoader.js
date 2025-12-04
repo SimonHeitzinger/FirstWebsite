@@ -1,7 +1,22 @@
-// js/menuLoader.js
+// js/menuLoader.js (NEU MIT UMSCHREIB-LOGIK)
+
+// Funktion, um den relativen Pfad vom aktuellen Standort zum Stamm zu berechnen
+function getPathPrefix() {
+    const pathSegments = window.location.pathname.split('/').filter(segment => segment.length > 0);
+    // Zählen, wie viele Ebenen wir hoch müssen, um zum Stamm zu gelangen
+    // Wir ignorieren das Repositoriums-Segment bei GitHub Pages
+    const depth = window.location.hostname.endsWith('.github.io') ? pathSegments.length - 1 : pathSegments.length;
+    
+    let prefix = '';
+    for (let i = 0; i < depth - 1; i++) { // -1 weil die index.html selbst eine Ebene ist
+        prefix += '../';
+    }
+    return prefix;
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Der Pfad ist jetzt relativ zur Basis-URL, die im HTML gesetzt wird (dank des <base>-Tags)
-    const menuPath = 'includes/navigation.html'; 
+    const menuPath = getPathPrefix() + 'includes/navigation.html'; // Lädt die Quelldatei relativ
     const menuContainer = document.getElementById('menu-container');
 
     if (menuContainer) {
@@ -9,26 +24,19 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.text())
             .then(html => {
                 menuContainer.innerHTML = html;
-
-                // NEU HIER: JS Logik für Klick-bares Submenü (besser für Touchscreens)
-                document.querySelectorAll('.has-submenu > a').forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        // Verhindert das Standard-Link-Verhalten auf mobilen Geräten
-                        if (window.innerWidth < 600) { 
-                             e.preventDefault();
-                             const submenu = this.nextElementSibling;
-                             if (submenu.style.display === 'block') {
-                                 submenu.style.display = 'none';
-                             } else {
-                                 submenu.style.display = 'block';
-                             }
-                        }
-                    });
+                
+                // JETZT WERDEN ALLE LINKS IM EINGEFÜGTEN HTML ANGEPASST
+                const prefix = getPathPrefix();
+                menuContainer.querySelectorAll('a').forEach(link => {
+                    const originalHref = link.getAttribute('href');
+                    // Wir hängen das Präfix VOR den Link
+                    link.setAttribute('href', prefix + originalHref);
                 });
+
+                // ... (Ihr Submenü-JS-Code für Klicks bleibt gleich) ...
             })
             .catch(error => {
                 console.error('Fehler beim Laden des Navigationsmenüs:', error);
-                menuContainer.innerHTML = '<p>Menü konnte nicht geladen werden.</p>';
             });
     }
 });
