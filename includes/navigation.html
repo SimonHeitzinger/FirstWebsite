@@ -1,18 +1,35 @@
-<!-- includes/navigation.html (ANGEPASST) -->
+<!-- includes/navigation.html -->
 <nav id="main-nav">
-    <ul>
-        <li><a href="/">Startseite</a></li>
-        
-        <li class="has-submenu">
-            <!-- Führender Schrägstrich hinzugefügt -->
-            <a href="/tools/geometrie/index.html">Geometrie-Rechner</a>
-            <ul class="submenu">
-                <!-- Führender Schrägstrich hinzugefügt -->
-                <li><a href="/tools/geometrie/quader/index.html">Quader</a></li>
-                <li><a href="/tools/geometrie/kugel/index.html">Kugel</a></li>
-                <li><a href="/tools/geometrie/zylinder/index.html">Zylinder</a></li>
-            </ul>
-        </li>
-        <!-- ... den Rest der Links ebenfalls anpassen ... -->
-    </ul>
+    <!-- Hinzufügen des Hamburger-Buttons -->
+    <button class="menu-toggle" aria-label="Menü öffnen/schließen" id="menu-toggle">
+        ☰
+    </button>
+
+    <div class="menu-container-inner"> <!-- Container für das Menü -->
+        <ul>
+            <li><a href="index.html">Startseite</a></li>
+            
+            <!-- ERSTES SUBMENÜ: Geometrie -->
+            <li class="has-submenu">
+                <a href="tools/geometrie/index.html">Geometrie-Rechner</a>
+                <ul class="submenu">
+                    <li><a href="tools/geometrie/quader/index.html">Quader</a></li>
+                    <li><a href="tools/geometrie/kugel/index.html">Kugel</a></li>
+                    <li><a href="tools/geometrie/zylinder/index.html">Zylinder</a></li>
+                </ul>
+            </li>
+
+            <!-- ZWEITES SUBMENÜ: Finanzen (NEU HIER EINGEFÜGT) -->
+            <li class="has-submenu">
+                <a href="tools/finanzen/index.html">Finanz-Rechner</a>
+                <ul class="submenu">
+                    <li><a href="tools/finanzen/zinsrechner/index.html">Zinsrechner</a></li>
+                    <li><a href="tools/finanzen/waehrung/index.html">Währungsrechner</a></li>
+                </ul>
+            </li>
+            
+            <!-- ... hier können weitere Hauptmenüpunkte folgen ... -->
+
+        </ul>
+    </div>
 </nav>

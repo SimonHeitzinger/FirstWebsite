@@ -1,21 +1,34 @@
-/* css/style.css */
+/* css/style.css (Optimierte Version) */
+
+/* --- Allgemeine Basis-Stile --- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f4f9;
     color: #333;
     margin: 0;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
+    padding: 0;
+    /* Standardmäßig (Handy) nehmen beide Elemente 100% Breite ein */
+    display: grid;
+    grid-template-areas: 
+        "header"
+        "main";
+    grid-template-columns: 1fr; 
+}
+
+/* Definition der Bereiche im Grid */
+#menu-container {
+    grid-area: header;
 }
 
 .container {
+    grid-area: main;
     background-color: #fff;
     padding: 30px;
-    border-radius: 10px;
+    border-radius: 0 0 10px 10px; /* Abgerundete Ecken nur unten am Handy */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
+    width: auto; 
+    max-width: none; 
+    margin: 20px;
 }
 
 h1 {
@@ -30,17 +43,9 @@ h2 {
     margin-top: 25px;
 }
 
-/* Styling für die Eingabefelder und Dropdowns */
-.dimension-group, .material-section {
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
+/* --- Styling für die Eingabefelder und Rechner --- */
+.dimension-group, .material-section { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
 input[type="number"], select {
     padding: 10px;
     margin-right: 10px;
@@ -49,26 +54,12 @@ input[type="number"], select {
     box-sizing: border-box;
     font-size: 1em;
 }
+input[type="number"] { width: 60%; }
+.dimension-group input, .dimension-group select { display: inline-block; vertical-align: middle; }
+.dimension-group select { width: 25%; }
+select#materialSelector { width: 100%; }
 
-input[type="number"] {
-    width: 60%;
-}
-
-/* Sorgt dafür, dass Input und Select nebeneinander in einer Zeile bleiben */
-.dimension-group input, .dimension-group select {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.dimension-group select {
-    width: 25%;
-}
-
-select#materialSelector {
-    width: 100%;
-}
-
-/* Styling für die Ergebnisse */
+/* --- Styling für die Ergebnisse --- */
 .results-section p {
     background-color: #e9ecef;
     padding: 12px;
@@ -78,18 +69,8 @@ select#materialSelector {
     align-items: center;
     margin-bottom: 10px;
 }
-
-strong {
-    color: #28a745; /* Grüne Farbe für die Ergebnisse */
-    font-size: 1.2em;
-}
-
-/* Styling für die Dropdowns bei den Ergebnissen */
-.result-unit-select {
-    font-size: 0.9em;
-    padding: 5px;
-    margin-left: 10px;
-}
+strong { color: #28a745; font-size: 1.2em; }
+.result-unit-select { font-size: 0.9em; padding: 5px; margin-left: 10px; }
 
 #autoScaleButton {
     padding: 10px 15px;
@@ -102,98 +83,126 @@ strong {
     font-size: 0.9em;
     width: 100%;
 }
+#autoScaleButton:hover { background-color: #0056b3; }
 
-#autoScaleButton:hover {
-    background-color: #0056b3;
+
+/* === DESKTOP LAYOUT (SIDEBAR) & MENÜ STYLING === */
+@media (min-width: 769px) {
+    body {
+        /* Ab 769px Breite: 2 Spalten. Links 250px für Menü, Rest für Inhalt */
+        grid-template-areas: 
+            "header main";
+        grid-template-columns: 250px 1fr; 
+        min-height: 100vh; /* Mindestens die volle Bildschirmhöhe */
+    }
+
+    #menu-container {
+        height: 100%;
+        position: fixed; /* Sidebar bleibt beim Scrollen sichtbar */
+        width: 250px;
+    }
+
+    .container {
+        margin: 20px;
+        border-radius: 10px;
+        max-width: 800px; /* Optional: Maximale Breite für sehr große Bildschirme */
+    }
+    
+    /* Auf Desktop ist das Menü standardmäßig sichtbar */
+    .menu-container-inner {
+        display: block !important; 
+    }
 }
 
-/* Stil für das Menü auf der Startseite */
-nav ul {
-    list-style-type: none;
-    padding: 0;
-}
 
-nav ul li a {
-    display: block;
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #f0f0f0;
-    text-decoration: none;
-    color: #0056b3;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-nav ul li a:hover {
-    background-color: #e9ecef;
-}
-/* css/style.css (am Ende hinzufügen) */
-
-/* Grundlegendes Styling für das Hauptmenü */
+/* --- Menü-Styling (Farben/Aussehen) --- */
 #main-nav ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-#main-nav ul li {
-    position: relative; /* Wichtig für die Positionierung des Submenüs */
-}
-
-/* Styling für die Links im Hauptmenü (hier können Sie Ihr altes Nav-Styling ersetzen) */
-#main-nav > ul > li > a {
+/* Styling für die Links im Hauptmenü (Das blaue Design) */
+#main-nav > .menu-container-inner > ul > li > a {
     display: block;
     padding: 10px 15px;
-    background-color: #0056b3;
+    background-color: #0056b3; /* BLAU */
     color: white;
     text-decoration: none;
-    border-bottom: 1px solid #003366;
+    border-bottom: 1px solid #003366; 
 }
 
-#main-nav > ul > li > a:hover {
-    background-color: #003366;
+#main-nav > .menu-container-inner > ul > li > a:hover {
+    background-color: #003366; /* Dunkleres BLAU beim Hover */
 }
 
 /* Submenü Styling */
 .submenu {
-    display: none; /* Standardmäßig versteckt */
-    position: absolute; /* Über dem Inhalt positionieren */
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 10;
-    min-width: 200px;
-    /* Positionierung für Desktop (neben dem Hauptelement) */
-    left: 100%; 
-    top: 0;
+    display: none; 
+    position: static; /* Statisch innerhalb der Sidebar */
+    background-color: #e9e9e9; 
+    box-shadow: none;
+    width: 100%;
 }
 
-/* Submenü Links */
 .submenu li a {
     color: #333;
     padding: 10px 15px;
+    padding-left: 30px; /* Einrücken */
     text-decoration: none;
     display: block;
+    background-color: #e9e9e9;
+    border-bottom: 1px solid #ccc;
 }
 
 .submenu li a:hover {
-    background-color: #e9e9e9;
+    background-color: #ddd;
 }
 
-/* Einblenden des Submenüs, wenn man über das Hauptelement fährt */
+/* Einblenden des Submenüs, wenn man auf Desktop hovert */
 #main-nav ul li.has-submenu:hover > .submenu {
     display: block;
 }
 
-/* Anpassungen, damit das Menü im mobilen Container gut aussieht */
-@media (max-width: 600px) {
-    .submenu {
-        position: relative; /* Im mobilen Layout unter dem Hauptelement */
-        left: 0;
-        top: auto;
-        background-color: #e9e9e9;
-        box-shadow: none;
+
+/* === MOBILE ANSICHT (< 769px) & HAMBURGER-MENÜ LOGIK === */
+.menu-toggle {
+    display: none; /* Standardmäßig versteckt (nur im Mobile Media Query sichtbar) */
+    background-color: #0056b3; 
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px 15px;
+    width: 100%;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    
+    /* Zeige den Hamburger-Button */
+    .menu-toggle {
+        display: block;
     }
+
+    /* Verstecke das Menü standardmäßig auf Handys */
+    .menu-container-inner {
+        display: none !important; /* JS fügt is-active hinzu um es zu zeigen */
+        position: absolute;
+        top: 45px; /* Unter dem Hamburger-Button */
+        right: 0;
+        width: 100%;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        background-color: white;
+    }
+    
+    /* Zustand, wenn das Menü aktiv (geöffnet) ist */
+    .menu-container-inner.is-active {
+        display: block !important;
+    }
+    
+    /* Im mobilen Modus Hover-Effekte für Submenüs deaktivieren */
     #main-nav ul li.has-submenu:hover > .submenu {
-        display: none; /* JS wird das Einblenden bei Klick übernehmen */
+        display: none; 
     }
 }
