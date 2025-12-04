@@ -1,7 +1,17 @@
 // tools/geometrie/kugel/script.js
 'use strict';
 
+
 document.addEventListener('DOMContentLoaded', (event) => {
+    // Stellen Sie sicher, dass menuLoader.js geladen wurde und die Funktion bereitstellt
+    if (typeof window.getPathPrefix !== 'function') {
+        console.error("Fehler: window.getPathPrefix ist nicht verfügbar. Bitte menuLoader.js vor diesem Skript laden.");
+        // Zeigt einen Fehler im HTML an, falls das Menü-Skript fehlt
+        document.getElementById('resultWeight').textContent = 'Fataler Fehler: Menü-Skript fehlt.';
+        return; 
+    }
+    
+
     // --- 1. DOM Referenzen setzen (lokal) ---
     const radiusInput = document.getElementById('radius');
     const unitRadiusSelector = document.getElementById('unitRadius');
