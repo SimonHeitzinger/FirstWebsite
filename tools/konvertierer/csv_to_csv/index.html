@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Konverter</title>
+    <!-- 4 Ebenen zurück: ../../../../ -->
+    <link rel="stylesheet" href="../../../../css/style.css">
+</head>
+<body>
+    
+    <header id="menu-container"></header>
+
+    <div class="container">
+        <h1>CSV Konverter</h1>
+        <p>Laden Sie eine CSV hoch, ändern Sie Trennzeichen und laden Sie sie wieder herunter.</p>
+
+        <section class="input-section">
+            <div class="dimension-group">
+                <label for="csvFileInput">1. CSV-Datei hochladen:</label>
+                <input type="file" id="csvFileInput" accept=".csv">
+            </div>
+
+            <hr> <!-- Trennlinie für bessere Übersicht -->
+
+            <div class="dimension-group">
+                <label for="inputDelimiter">2. Aktuelles Listentrennzeichen:</label>
+                <select id="inputDelimiter">
+                    <option value=",">,</option>
+                    <option value=";" selected>;</option>
+                    <option value="\t">Tabulator</option>
+                </select>
+            </div>
+            
+            <div class="dimension-group">
+                <label for="inputDecimal">3. Aktuelles Dezimaltrennzeichen:</label>
+                <select id="inputDecimal">
+                    <option value=".">.</option>
+                    <option value="," selected>,</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <div class="dimension-group">
+                <label for="outputDelimiter">4. Ziel-Listentrennzeichen:</label>
+                <select id="outputDelimiter">
+                    <option value="," selected>,</option>
+                    <option value=";">;</option>
+                    <option value="\t">Tabulator</option>
+                </select>
+            </div>
+
+            <div class="dimension-group">
+                <label for="outputDecimal">5. Ziel-Dezimaltrennzeichen:</label>
+                <select id="outputDecimal">
+                    <option value="." selected>.</option>
+                    <option value=",">,</option>
+                </select>
+            </div>
+
+            <button id="convertButton" disabled>6. Konvertieren & Download</button>
+            <p id="statusArea" style="color:red; margin-top: 10px;"></p>
+        </section>
+    </div>
+
+    <!-- Skripte laden -->
+    <script src="../../../../js/menuLoader.js"></script>
+    <script src="csvConverter.js"></script> 
+</body>
+</html>
