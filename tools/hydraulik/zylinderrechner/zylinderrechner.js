@@ -31,15 +31,16 @@ function toggleFlowInputs() {
 function toggleSpeedInputs() {
     const calcMode = document.getElementById('calcModeOption').value;
     
-    // Benötigt Volumen (forceVolume, all) ODER Geschwindigkeit (forceSpeed, all)
-    const needsVolume = (calcMode === 'forceVolume' || calcMode === 'all');
-    const needsSpeed = (calcMode === 'forceSpeed' || calcMode === 'all');
+    // Benötigt Volumen (forceVolume, all)
+    const needsVolumeInput = (calcMode === 'forceVolume' || calcMode === 'all');
+    // Benötigt Geschwindigkeit (forceSpeed, all)
+    const needsSpeedInput = (calcMode === 'forceSpeed' || calcMode === 'all');
 
-    // Hublänge wird für Volumen UND Geschwindigkeit benötigt
-    document.getElementById('strokeGroup').classList.toggle('hidden', !(needsVolume || needsSpeed));
+    // Hublänge wird nur für Volumen benötigt
+    document.getElementById('strokeGroup').classList.toggle('hidden', !needsVolumeInput);
 
     // Ölversorgung wird NUR für Geschwindigkeit benötigt
-    document.getElementById('oilSupplyGroup').classList.toggle('hidden', !needsSpeed);
+    document.getElementById('oilSupplyGroup').classList.toggle('hidden', !needsSpeedInput);
     
     calculateCylinder(); // Nach dem Umschalten neu berechnen
 }
