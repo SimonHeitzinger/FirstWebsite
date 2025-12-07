@@ -1,4 +1,3 @@
-// tools/finanzen/waehrung/waehrungsrechner.js
 'use strict';
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -9,57 +8,90 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const currencyToSelector = document.getElementById('currencyTo');
     const rateDisplay = document.getElementById('exchangeRateDisplay');
 
-    // --- 2. Datenhaltung ---
-    const API_URL = 'api.frankfurter.app'; 
-    let exchangeRates = {}; 
+    // --- 2. Datenhaltung & Konstanten ---
+    const FRANKFURTER_API_URL =  'https://api.frankfurter.app/latest';
+    const RESTCOUNTRIES_API_URL = 'https://restcountries.com/v3.1/all?fields=currencies';
 
-    // --- 3. Logik zum Laden der Kurse ---
-    function fetchExchangeRates() {
-        fetch(API_URL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Netzwerkantwort war nicht ok: ' + response.statusText);
+    let exchangeRates = {};
+    let currencyNames = {}; // Neu: Speichert die Namen aus der Länder-API
+
+
+    // --- 3. Logik zum Laden der Daten (zwei APIs) ---
+    function fetchAllData() {
+        const fetchRates = fetch(FRANKFURTER_API_URL).then(response => {
+            if (!response.ok) throw new Error('Frankfurter-API nicht erreichbar.');
+            return response.json();
+        });
+
+        const fetchNames = fetch(RESTCOUNTRIES_API_URL).then(response => {
+            if (!response.ok) throw new Error('REST Countries-API nicht erreichbar.');
+            return response.json();
+        });
+
+        Promise.all([fetchRates, fetchNames])
+            .then(([ratesData, countriesData]) => {
+                if (ratesData && ratesData.rates) {
+                    exchangeRates = ratesData.rates;
+                    if(ratesData.base) {
+                        exchangeRates[ratesData.base] = 1.0;
+                    }
+                } else {
+                    throw new Error('Fehler: Ungültiges Datenformat von der Frankfurter-API.');
                 }
-                return response.json();
-            })
-            .then(data => {
-                // Die Struktur von Frankfurter API ist etwas anders:
-                exchangeRates = data.rates;
-                // Da Frankfurter API den Basiswert nicht in data.rates anzeigt, müssen wir ihn hinzufügen.
-                // In diesem Fall ist es der EUR-Wert aus dem "base"-Feld der API-Antwort.
-                if(data.base) {
-                    exchangeRates[data.base] = 1.0;
+
+                if (countriesData) {
+                    countriesData.forEach(country => {
+                        if (country.currencies) {
+                            for (const code in country.currencies) {
+                                if (exchangeRates[code] && !currencyNames[code]) {
+                                    currencyNames[code] = country.currencies[code].name;
+                                }
+                            }
+                        }
+                    });
                 }
                 
+                // HIER IST DIE KONSOLENAUSGABE
+                console.log("-----------------------------------------");
+                console.log("Währungen mit Namen (aus API-Daten):");
+                console.log("-----------------------------------------");
+                const sortedCurrencies = Object.keys(currencyNames).sort();
+                sortedCurrencies.forEach(code => {
+                    console.log(`Code: ${code}, Name: ${currencyNames[code]}`);
+                });
+                console.log("-----------------------------------------");
+
                 populateCurrencySelectors();
-                calculateConversion(); 
+                calculateConversion();
             })
             .catch(error => {
-                console.error('Fehler beim Abrufen der Wechselkurse:', error);
-                rateDisplay.textContent = 'Fehler: Kurse konnten nicht geladen werden (API-Problem).';
+                console.error('Fehler beim Abrufen der Daten:', error);
+                rateDisplay.textContent = 'Fehler: Daten konnten nicht geladen werden (API-Problem).';
             });
     }
 
-    // Befüllt die Dropdowns mit den Währungscodes
+    // --- 4. Befüllen der Dropdowns (Unverändert) ---
     function populateCurrencySelectors() {
-        const currencies = Object.keys(exchangeRates).sort(); 
+        const currencies = Object.keys(exchangeRates).sort();
         currencies.forEach(currency => {
+            const currencyName = currencyNames[currency] || currency;
+            
             const optionFrom = document.createElement('option');
             optionFrom.value = currency;
-            optionFrom.textContent = currency;
+            optionFrom.textContent = `${currency} - ${currencyName}`;
             currencyFromSelector.appendChild(optionFrom);
 
             const optionTo = document.createElement('option');
             optionTo.value = currency;
-            optionTo.textContent = currency;
+            optionTo.textContent = `${currency} - ${currencyName}`;
             currencyToSelector.appendChild(optionTo);
         });
-        
+
         currencyFromSelector.value = 'EUR';
         currencyToSelector.value = 'USD';
     }
 
-    // --- 4. Berechnungslogik ---
+    // --- 5. Berechnungslogik (Unverändert) ---
     function calculateConversion() {
         const amountFrom = parseFloat(amountFromInput.value);
         const currencyFrom = currencyFromSelector.value;
@@ -79,12 +111,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         rateDisplay.textContent = `1 ${currencyFrom} = ${currentRate.toFixed(4)} ${currencyTo}`;
     }
 
-    // --- 5. Event Listener ---
+    // --- 6. Event Listener (Unverändert) ---
     [amountFromInput, currencyFromSelector, currencyToSelector].forEach(element => {
         element.addEventListener('input', calculateConversion);
         element.addEventListener('change', calculateConversion);
     });
 
-    // --- 6. Initialisierung ---
-    fetchExchangeRates(); 
+    // --- 7. Initialisierung ---
+    fetchAllData();
 });

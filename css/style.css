@@ -211,3 +211,27 @@ strong { color: #28a745; font-size: 1.2em; }
         display: none; 
     }
 }
+
+
+/* --- Spezielle Stile für den Währungsrechner --- */
+
+/* Macht die Haupt-Eingabefelder des Währungsrechners größer */
+#amountFrom, #amountTo {
+    font-size: 1.5em;   /* Textgröße erhöhen */
+    padding: 15px;      /* Innenabstand erhöhen */
+    width: 60%;         /* Breite anpassen, damit es gut aussieht */
+}
+
+/* Passt die Größe der Währungsauswahl-Dropdowns im Rechner an */
+#currencyFrom, #currencyTo {
+    font-size: 1.1em;
+    padding: 15px;
+    width: 35%;
+}
+
+/* Sorgt für etwas mehr Abstand beim Wechselkurs-Ergebnis */
+#exchangeRateDisplay {
+    font-size: 1.1em;
+    padding: 15px;
+    background-color: #e0f7fa; /* Hellblauer Hintergrund */
+}
