@@ -1,6 +1,7 @@
 'use strict';
 
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
+
     // --- 1. DOM Referenzen ---
     const amountFromInput = document.getElementById('amountFrom');
     const amountToInput = document.getElementById('amountTo');
@@ -8,82 +9,101 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const currencyToSelector = document.getElementById('currencyTo');
     const rateDisplay = document.getElementById('exchangeRateDisplay');
 
-    // --- 2. Datenhaltung & Konstanten ---
-    const FRANKFURTER_API_URL =  'https://api.frankfurter.app/latest';
+    // --- 2. API URLs ---
+    const FRANKFURTER_API_URL = 'https://api.frankfurter.app/latest';
     const RESTCOUNTRIES_API_URL = 'https://restcountries.com/v3.1/all?fields=currencies';
 
+    // ✅ Richtige CoinGecko API
+    const COINGECKO_API_URL =
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,ripple&vs_currencies=eur';
+
+    // --- 3. Datenhaltung ---
     let exchangeRates = {};
-    let currencyNames = {}; // Neu: Speichert die Namen aus der Länder-API
+    let currencyNames = {};
+    let cryptoRates = {};
 
-
-    // --- 3. Logik zum Laden der Daten (zwei APIs) ---
+    // --- 4. Alle Daten laden ---
     function fetchAllData() {
-        const fetchRates = fetch(FRANKFURTER_API_URL).then(response => {
-            if (!response.ok) throw new Error('Frankfurter-API nicht erreichbar.');
-            return response.json();
-        });
 
-        const fetchNames = fetch(RESTCOUNTRIES_API_URL).then(response => {
-            if (!response.ok) throw new Error('REST Countries-API nicht erreichbar.');
-            return response.json();
-        });
+        const fetchRates = fetch(FRANKFURTER_API_URL)
+            .then(response => {
+                if (!response.ok) throw new Error('Frankfurter-API nicht erreichbar');
+                return response.json();
+            });
 
-        Promise.all([fetchRates, fetchNames])
-            .then(([ratesData, countriesData]) => {
-                if (ratesData && ratesData.rates) {
-                    exchangeRates = ratesData.rates;
-                    if(ratesData.base) {
-                        exchangeRates[ratesData.base] = 1.0;
-                    }
-                } else {
-                    throw new Error('Fehler: Ungültiges Datenformat von der Frankfurter-API.');
-                }
+        const fetchNames = fetch(RESTCOUNTRIES_API_URL)
+            .then(response => {
+                if (!response.ok) throw new Error('REST Countries-API nicht erreichbar');
+                return response.json();
+            });
 
-                if (countriesData) {
-                    countriesData.forEach(country => {
-                        if (country.currencies) {
-                            for (const code in country.currencies) {
-                                if (exchangeRates[code] && !currencyNames[code]) {
-                                    currencyNames[code] = country.currencies[code].name;
-                                }
-                            }
+        const fetchCrypto = fetch(COINGECKO_API_URL)
+            .then(response => {
+                if (!response.ok) throw new Error('CoinGecko-API nicht erreichbar');
+                return response.json();
+            });
+
+        Promise.all([fetchRates, fetchNames, fetchCrypto])
+            .then(([ratesData, countriesData, cryptoData]) => {
+
+                // --- Fiat Wechselkurse ---
+                exchangeRates = ratesData.rates;
+                exchangeRates[ratesData.base] = 1;
+
+                // --- Währungsnamen ---
+                countriesData.forEach(country => {
+                    if (country.currencies) {
+                        for (const code in country.currencies) {
+                            currencyNames[code] = country.currencies[code].name;
                         }
-                    });
-                }
-                
-                // HIER IST DIE KONSOLENAUSGABE
-                console.log("-----------------------------------------");
-                console.log("Währungen mit Namen (aus API-Daten):");
-                console.log("-----------------------------------------");
-                const sortedCurrencies = Object.keys(currencyNames).sort();
-                sortedCurrencies.forEach(code => {
-                    console.log(`Code: ${code}, Name: ${currencyNames[code]}`);
+                    }
                 });
-                console.log("-----------------------------------------");
+
+                // --- Krypto-Kurse (EUR als Basis) ---
+                cryptoRates = {
+                    BTC: cryptoData.bitcoin.eur,
+                    ETH: cryptoData.ethereum.eur,
+                    XRP: cryptoData.ripple.eur
+                };
+
+                // --- Krypto in Wechselkurse integrieren ---
+                exchangeRates = { ...exchangeRates, ...cryptoRates };
+
+                // --- Krypto-Namen ---
+                currencyNames = {
+                    ...currencyNames,
+                    BTC: 'Bitcoin',
+                    ETH: 'Ethereum',
+                    XRP: 'XRP'
+                };
 
                 populateCurrencySelectors();
                 calculateConversion();
             })
             .catch(error => {
-                console.error('Fehler beim Abrufen der Daten:', error);
-                rateDisplay.textContent = 'Fehler: Daten konnten nicht geladen werden (API-Problem).';
+                console.error(error);
+                rateDisplay.textContent = 'Fehler beim Laden der APIs.';
             });
     }
 
-    // --- 4. Befüllen der Dropdowns (Unverändert) ---
+    // --- 5. Dropdowns befüllen ---
     function populateCurrencySelectors() {
         const currencies = Object.keys(exchangeRates).sort();
+
+        currencyFromSelector.innerHTML = '';
+        currencyToSelector.innerHTML = '';
+
         currencies.forEach(currency => {
-            const currencyName = currencyNames[currency] || currency;
-            
+            const name = currencyNames[currency] || currency;
+
             const optionFrom = document.createElement('option');
             optionFrom.value = currency;
-            optionFrom.textContent = `${currency} - ${currencyName}`;
+            optionFrom.textContent = `${currency} - ${name}`;
             currencyFromSelector.appendChild(optionFrom);
 
             const optionTo = document.createElement('option');
             optionTo.value = currency;
-            optionTo.textContent = `${currency} - ${currencyName}`;
+            optionTo.textContent = `${currency} - ${name}`;
             currencyToSelector.appendChild(optionTo);
         });
 
@@ -91,13 +111,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
         currencyToSelector.value = 'USD';
     }
 
-    // --- 5. Berechnungslogik (Unverändert) ---
+    // --- 6. Berechnung ---
     function calculateConversion() {
         const amountFrom = parseFloat(amountFromInput.value);
         const currencyFrom = currencyFromSelector.value;
         const currencyTo = currencyToSelector.value;
 
-        if (isNaN(amountFrom) || amountFrom < 0 || !exchangeRates[currencyFrom] || !exchangeRates[currencyTo]) {
+        if (
+            isNaN(amountFrom) ||
+            amountFrom < 0 ||
+            !exchangeRates[currencyFrom] ||
+            !exchangeRates[currencyTo]
+        ) {
             amountToInput.value = '';
             rateDisplay.textContent = 'Ungültige Eingabe oder Kurse fehlen.';
             return;
@@ -111,12 +136,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         rateDisplay.textContent = `1 ${currencyFrom} = ${currentRate.toFixed(4)} ${currencyTo}`;
     }
 
-    // --- 6. Event Listener (Unverändert) ---
+    // --- 7. Events ---
     [amountFromInput, currencyFromSelector, currencyToSelector].forEach(element => {
         element.addEventListener('input', calculateConversion);
         element.addEventListener('change', calculateConversion);
     });
 
-    // --- 7. Initialisierung ---
+    // --- 8. Start ---
     fetchAllData();
+
 });
