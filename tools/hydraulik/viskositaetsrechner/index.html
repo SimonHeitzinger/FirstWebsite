@@ -3,50 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viskositätsrechner</title>
+    <title>Hydrauliköl-Viskositätsrechner</title>
+    <!-- 4 Ebenen zurück: ../../../../ -->
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
     
-    <!-- HIER WIRD DAS MENÜ EINGEFÜGT -->
     <header id="menu-container"></header>
 
     <div class="container">
-        <h1>Viskositätsrechner</h1>
-        <p>Berechnen Sie Kräfte Volumen und Geschwindgkeiten</p>
+        <h1>Hydrauliköl-Viskositätsrechner</h1>
+        <p>Berechnen Sie die Viskosität bei einer bestimmten Betriebstemperatur.</p>
 
         <section class="input-section">
             <div class="dimension-group">
-                <label for="initialAmount">Startkapital (€):</label>
-                <input type="number" id="initialAmount" min="0" step="any" value="1000">
+                <label for="oilTypeSelector">1. Hydrauliköl auswählen:</label>
+                <select id="oilTypeSelector">
+                    <option value="ISO VG 32">ISO VG 32</option>
+                    <option value="ISO VG 46">ISO VG 46</option>
+                    <option value="ISO VG 68">ISO VG 68</option>
+                    <option value="custom">Eigenes Öl eingeben</option>
+                </select>
             </div>
-            
-            <div class="dimension-group">
-                <label for="interestRate">Zinssatz (% p.a.):</label>
-                <input type="number" id="interestRate" min="0" step="any" value="3.5">
+
+            <!-- Felder für benutzerdefinierte Eingabe (standardmäßig versteckt) -->
+            <div id="customInputs" style="display: none;">
+                <div class="dimension-group">
+                    <label for="viscosity40C">Viskosität bei 40°C (cSt):</label>
+                    <input type="number" id="viscosity40C" min="0" step="any" value="46">
+                </div>
+                <div class="dimension-group">
+                    <label for="viscosity100C">Viskosität bei 100°C (cSt):</label>
+                    <input type="number" id="viscosity100C" min="0" step="any" value="7">
+                </div>
             </div>
-            
+
             <div class="dimension-group">
-                <label for="years">Laufzeit (Jahre):</label>
-                <input type="number" id="years" min="0" step="1" value="5">
+                <label for="operatingTemp">2. Betriebstemperatur (°C):</label>
+                <input type="number" id="operatingTemp" step="any" value="60">
             </div>
         </section>
 
         <section class="results-section">
             <h2>Ergebnisse:</h2>
             <p>
-                Zinsen gesamt: <strong id="resultInterest">0</strong> €
+                Viskosität bei Betriebstemp.: <strong id="resultViscosity">0</strong> cSt
             </p>
-            <p>
-                Endkapital: <strong id="resultTotal">0</strong> €
-            </p>
+            <p id="statusArea" style="color:red;"></p>
         </section>
     </div>
 
     <!-- Skripte laden -->
-    <!-- menuLoader MUSS zuerst geladen werden, wegen window.getPathPrefix() -->
     <script src="../../../js/menuLoader.js"></script>
-    <!-- Das spezifische Skript für diesen Rechner -->
-    <script src="zinsrechner.js"></script> 
+    <script src="viskositaetsrechner.js"></script> 
 </body>
 </html>

@@ -3,50 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zylinderrechner</title>
+    <title>Hydraulikzylinder Rechner</title>
     <link rel="stylesheet" href="../../../css/style.css">
-</head>
-<body>
     
-    <!-- HIER WIRD DAS MENÜ EINGEFÜGT -->
+   <style>
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        /* Diese Klasse MUSS im CSS definiert sein, damit JS funktioniert */
+        .hidden {
+            display: none !important; 
+        }
+        .unit-selector {
+            margin-left: 10px;
+            padding: 5px;
+        }
+        .result-box {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        /* Neuer Stil für fehlerhafte Eingabefelder */
+        .is-invalid {
+            background-color: #ffdddd !important; /* Hellrot */
+            border-color: #d9534f !important;    /* Dunklerer roter Rand */
+        }
+
+        /* Neue Klasse, um die Ergebnisboxen standardmäßig zu verstecken, bis die erste Berechnung abgeschlossen ist */
+        .results-hidden {
+            display: none;
+}
+
+    </style>
+</head><body>
     <header id="menu-container"></header>
 
     <div class="container">
-        <h1>Zylinderrechner</h1>
-        <p>Berechnen Sie Kräfte Volumen und Geschwindgkeiten</p>
+        <h1>Hydraulikzylinder Rechner</h1>
 
-        <section class="input-section">
-            <div class="dimension-group">
-                <label for="initialAmount">Startkapital (€):</label>
-                <input type="number" id="initialAmount" min="0" step="any" value="1000">
-            </div>
-            
-            <div class="dimension-group">
-                <label for="interestRate">Zinssatz (% p.a.):</label>
-                <input type="number" id="interestRate" min="0" step="any" value="3.5">
-            </div>
-            
-            <div class="dimension-group">
-                <label for="years">Laufzeit (Jahre):</label>
-                <input type="number" id="years" min="0" step="1" value="5">
-            </div>
-        </section>
+        <div class="input-grid">
+            <!-- Eingaben Zylinder -->
+            <div class="input-group">
+                <h2>Zylinderdaten</h2>
 
-        <section class="results-section">
-            <h2>Ergebnisse:</h2>
-            <p>
-                Zinsen gesamt: <strong id="resultInterest">0</strong> €
-            </p>
-            <p>
-                Endkapital: <strong id="resultTotal">0</strong> €
-            </p>
-        </section>
+                <!-- NEU: Zentrales Steuerelement für die Art der Berechnung -->
+                <label for="calcModeOption">Berechnungsmodus:</label>
+                <select id="calcModeOption" onchange="toggleSpeedInputs(); calculateCylinder();">
+                    <option value="forceOnly" selected>Nur Kraft</option>
+                    <option value="forceVolume">Kraft und Volumen</option>
+                    <option value="forceSpeed">Kraft und Geschwindigkeit</option>
+                    <option value="all">Alles (Kraft, Geschw., Volumen)</option>
+                </select>
+                
+                <!-- STANDARD: Einfachwirkend vorausgewählt -->
+                <label for="cylinderType">Zylindertyp:</label>
+                <select id="cylinderType" onchange="toggleRodInput()">
+                    <option value="double">Doppeltwirkend</option>
+                    <option value="single" selected>Einfachwirkend</option>
+                </select>
+
+                <label for="pistonDiameter">Kolbendurchmesser (D) [mm]:</label>
+                <input type="number" id="pistonDiameter" placeholder="100">
+
+                <!-- Standardmäßig bei Einfachwirkend versteckt -->
+                <div id="rodGroup" class="hidden"> 
+                    <label for="rodDiameter">Kolbenstangendurchmesser (d) [mm]:</label>
+                    <input type="number" id="rodDiameter" placeholder="50">
+                </div>
+                
+                <!-- Standardmäßig bei "Nur Kraft" versteckt -->
+                <div id="strokeGroup" class="hidden"> 
+                    <label for="strokeLength">Hublänge (Länge) [mm]:</label>
+                    <input type="number" id="strokeLength" placeholder="500">
+                </div>
+
+                <label for="pressure">Druck (P) [bar]:</label>
+                <input type="number" id="pressure" placeholder="200">
+            </div>
+
+            <!-- Ölversorgung (Standardmäßig versteckt) -->
+            <div class="input-group hidden" id="oilSupplyGroup">
+                <h2>Ölversorgung</h2>
+                <label for="flowSource">Ölversorgung via:</label>
+                <select id="flowSource" onchange="toggleFlowInputs()">
+                    <option value="direct">Direkteingabe [L/min]</option>
+                    <option value="pump">Pumpenparameter</option>
+                </select>
+                <div id="directFlowGroup">
+                    <label for="flowRate">Flussrate (Q) [L/min]:</label>
+                    <input type="number" id="flowRate" placeholder="40">
+                </div>
+                
+                <div id="pumpFlowGroup" class="hidden">
+                    <label for="pumpCCM">Verdrängung Pumpe [ccm/U]:</label>
+                    <input type="number" id="pumpCCM" placeholder="25">
+                    <label for="pumpRPM">Umdrehungen Pumpe [U/min]:</label>
+                    <input type="number" id="pumpRPM" placeholder="1500">
+                </div>
+
+                <!-- NEU: Ergebniszeile für die berechnete Flussrate -->
+                <p id="calculatedFlowRateP" class="hidden">
+                    Berechnete Flussrate: <span class="result-value" id="calculatedFlowRate">0</span> L/min
+                </p>
+            </div>
+        </div>
+
+        
+
+        <button onclick="calculateCylinder()">Berechnen</button>
+
+        <!-- Ergebnisse (STANDARDMÄSSIG VERSTECKT) -->
+        <div class="results-group results-hidden" id="mainResultsGroup">
+            <div class="result-box">
+                <h3>Ausfahren (Kolbenseite)</h3>
+                <p>Kraft: <span class="result-value" id="forceExtend">0 N</span>
+                    <select class="unit-selector" onchange="calculateCylinder()" id="unitSelectorExtend">
+                        <option value="N">Newton (N)</option>
+                        <option value="kN">Kilonewton (kN)</option>
+                        <option value="t">Tonne (t)</option>
+                    </select>
+                </p>
+                <!-- IDs für die Ergebnis-P-Tags, die ausgeblendet werden können -->
+                <p id="speedExtendResultP" class="hidden">Geschwindigkeit: <span class="result-value" id="speedExtend">0 mm/s</span></p>
+                <p id="volumeExtendResultP" class="hidden">Volumen pro Hub: <span class="result-value" id="volumeExtend">0 L</span></p>
+            </div>
+            <div class="result-box hidden" id="retractResults">
+                <h3>Einfahren (Stangenseite)</h3>
+                <p>Kraft: <span class="result-value" id="forceRetract">0 N</span>
+                    <select class="unit-selector" onchange="calculateCylinder()" id="unitSelectorRetract">
+                        <option value="N">Newton (N)</option>
+                        <option value="kN">Kilonewton (kN)</option>
+                        <option value="t">Tonne (t)</option>
+                    </select>
+                </p>
+                <p id="speedRetractResultP" class="hidden">Geschwindigkeit: <span class="result-value" id="speedRetract">0 mm/s</span></p>
+                <p id="volumeRetractResultP" class="hidden">Volumen pro Hub: <span class="result-value" id="volumeRetract">0 L</span></p>
+            </div>
+        </div>
     </div>
 
     <!-- Skripte laden -->
-    <!-- menuLoader MUSS zuerst geladen werden, wegen window.getPathPrefix() -->
     <script src="../../../js/menuLoader.js"></script>
-    <!-- Das spezifische Skript für diesen Rechner -->
-    <script src="zinsrechner.js"></script> 
+    <script src="zylinderrechner.js"></script> 
 </body>
 </html>
