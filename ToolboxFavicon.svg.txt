@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- background -->
+  <rect width="64" height="64" rx="10" fill="#2C3E50"/>
+
+  <!-- browser header -->
+  <rect x="8" y="12" width="48" height="10" rx="2" fill="#1F2A37"/>
+
+  <!-- header dots -->
+  <circle cx="16" cy="17" r="3" fill="#FF5F56"/>
+  <circle cx="26" cy="17" r="3" fill="#FFBD2E"/>
+  <circle cx="36" cy="17" r="3" fill="#27C93F"/>
+
+  <!-- inner window -->
+  <rect x="10" y="24" width="44" height="30" rx="4"
+        fill="#34495E" stroke="#BFD1E5" stroke-width="2"/>
+
+  <!-- code brackets -->
+  <path d="M20 35 l-6 5 l6 5"
+        stroke="#ECF0F1" stroke-linecap="round"
+        stroke-width="3" fill="none"/>
+  <path d="M28 35 l6 5 l-6 5"
+        stroke="#ECF0F1" stroke-linecap="round"
+        stroke-width="3" fill="none"/>
+
+  <!-- gear - improved -->
+  <g transform="translate(45,37)">
+    <circle r="6" fill="none" stroke="#ECF0F1" stroke-width="2"/>
+    <!-- gear teeth -->
+    <g stroke="#ECF0F1" stroke-width="2" stroke-linecap="round">
+      <line x1="0" y1="-9" x2="0" y2="-6"/>
+      <line x1="0" y1="9" x2="0" y2="6"/>
+      <line x1="9" y1="0" x2="6" y2="0"/>
+      <line x1="-9" y1="0" x2="-6" y2="0"/>
+      <line x1="6" y1="6" x2="4" y2="4"/>
+      <line x1="-6" y1="6" x2="-4" y2="4"/>
+      <line x1="6" y1="-6" x2="4" y2="-4"/>
+      <line x1="-6" y1="-6" x2="-4" y2="-4"/>
+    </g>
+    <circle r="2.5" fill="#ECF0F1"/>
+  </g>
+</svg>
